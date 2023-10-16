@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://jje6nmq855e7"]
+
+[ext_resource type="Texture2D" uid="uid://dr0bfl08f4huo" path="res://img/bar.png" id="1_xhvy6"]
+[ext_resource type="Texture2D" uid="uid://bsoysdoyyr7dq" path="res://img/bar_inside.png" id="2_pme44"]
+[ext_resource type="Texture2D" uid="uid://dtx2kue73g352" path="res://img/heart.png" id="3_pwglc"]
+[ext_resource type="Texture2D" uid="uid://d2wmn2c8ndhnw" path="res://img/shoe.png" id="4_pxquv"]
+
+[node name="Control" type="CanvasLayer"]
+
+[node name="HealthBar" type="Sprite2D" parent="."]
+position = Vector2(51, 230)
+texture = ExtResource("1_xhvy6")
+
+[node name="HealthProgressBar" type="TextureProgressBar" parent="HealthBar"]
+offset_left = -21.0
+offset_top = -5.0
+offset_right = 21.0
+offset_bottom = 5.0
+value = 100.0
+nine_patch_stretch = true
+texture_progress = ExtResource("2_pme44")
+tint_progress = Color(0.603922, 0.113725, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Icon" type="Sprite2D" parent="HealthBar"]
+position = Vector2(-33, 0)
+texture = ExtResource("3_pwglc")
+
+[node name="StaminaBar" type="Sprite2D" parent="."]
+position = Vector2(51, 250)
+texture = ExtResource("1_xhvy6")
+
+[node name="StaminaProgressBar" type="TextureProgressBar" parent="StaminaBar"]
+offset_left = -21.0
+offset_top = -5.0
+offset_right = 21.0
+offset_bottom = 5.0
+value = 100.0
+nine_patch_stretch = true
+texture_progress = ExtResource("2_pme44")
+tint_progress = Color(0.517647, 0.737255, 0.784314, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Icon" type="Sprite2D" parent="StaminaBar"]
+position = Vector2(-33, 0)
+rotation = 0.392699
+texture = ExtResource("4_pxquv")

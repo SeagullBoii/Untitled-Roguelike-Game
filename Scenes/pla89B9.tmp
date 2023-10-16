@@ -1,0 +1,118 @@
+[gd_scene load_steps=14 format=3 uid="uid://yvrxwlkphehr"]
+
+[ext_resource type="Texture2D" uid="uid://cfbnpa3dbvsgo" path="res://img/lumberjack.png" id="1_lsssv"]
+[ext_resource type="Script" path="res://Scripts/Player.gd" id="2_h1lyi"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_06jb4"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nqoh5"]
+animation = &"Walk"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6d2xy"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_56e12"]
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"is_moving"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ki768"]
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"is_idle"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_da2e0"]
+states/Idle/node = SubResource("AnimationNodeAnimation_06jb4")
+states/Idle/position = Vector2(362, 94)
+states/Start/position = Vector2(211, 100)
+states/Walk/node = SubResource("AnimationNodeAnimation_nqoh5")
+states/Walk/position = Vector2(502, 88)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_6d2xy"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_56e12"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_ki768")]
+
+[sub_resource type="Animation" id="Animation_5yk7u"]
+resource_name = "Idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_5futr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_d7687"]
+resource_name = "Walk"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [2, 3, 4, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r0rhd"]
+_data = {
+"Idle": SubResource("Animation_5yk7u"),
+"RESET": SubResource("Animation_5futr"),
+"Walk": SubResource("Animation_d7687")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_utx3v"]
+size = Vector2(12, 30)
+
+[node name="Player" type="CharacterBody2D"]
+position = Vector2(40, 48)
+script = ExtResource("2_h1lyi")
+sprintSpeed = 3
+walkSpeed = 4
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 7.0
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_lsssv")
+hframes = 8
+
+[node name="AnimTree" type="AnimationTree" parent="Sprite"]
+tree_root = SubResource("AnimationNodeStateMachine_da2e0")
+anim_player = NodePath("AnimationPlayer")
+parameters/conditions/is_idle = false
+parameters/conditions/is_moving = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite/AnimTree"]
+libraries = {
+"": SubResource("AnimationLibrary_r0rhd")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_utx3v")
